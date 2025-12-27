@@ -1,0 +1,7 @@
+src/lib/prisma.ts(1,10): error TS2305: Module '"@prisma/client"' has no exported member 'PrismaClient'.
+src/modules/auth/auth.service.ts(34,24): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/modules/auth/auth.service.ts(35,30): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/modules/auth/auth.service.ts(42,29): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/modules/auth/auth.service.ts(80,26): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/modules/auth/auth.service.ts(81,32): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/modules/auth/auth.service.ts(88,29): error TS7006: Parameter 'r' implicitly has an 'any' type.
