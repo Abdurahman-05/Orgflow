@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { loginUser, refreshUserToken, registerUser } from "./auth.service";
 import { loginSchema, registerSchema, refreshTokenSchema } from "./auth.schema";
 
+
 export async function registerHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const input = registerSchema.parse(req.body);

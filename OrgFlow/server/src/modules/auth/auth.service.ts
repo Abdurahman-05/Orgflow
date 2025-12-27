@@ -1,7 +1,8 @@
-import { prisma } from "../../lib/prisma";
 import { LoginInput, RegisterInput } from "./auth.schema";
 import bcrypt from "bcryptjs";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../../utils/jwt";
+import prisma from "../../lib/prisma";
+import { AppError } from "../../utils/AppError";
 
 export async function registerUser(input: RegisterInput) {
   const { email, password, name } = input;
@@ -11,7 +12,7 @@ export async function registerUser(input: RegisterInput) {
   });
 
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new AppError("User already exists", 409); // <-- Replaced
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -25,7 +26,7 @@ export async function registerUser(input: RegisterInput) {
   });
 
   const { passwordHash: _, ...userWithoutPassword } = user;
-  
+
   return userWithoutPassword;
 }
 
@@ -37,13 +38,13 @@ export async function loginUser(input: LoginInput) {
   });
 
   if (!user || !user.passwordHash) {
-    throw new Error("Invalid email or password");
+    throw new AppError("Invalid email or password", 401); // <-- Replaced
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
   if (!isPasswordValid) {
-    throw new Error("Invalid email or password");
+    throw new AppError("Invalid email or password", 401); // <-- Replaced
   }
 
   const payload = { userId: user.id, email: user.email };
@@ -57,7 +58,7 @@ export async function refreshUserToken(refreshToken: string) {
   const decoded = verifyRefreshToken(refreshToken);
 
   if (!decoded || typeof decoded === "string") {
-    throw new Error("Invalid refresh token");
+    throw new AppError("Invalid refresh token", 401); // <-- Replaced
   }
 
   // Check if user still exists
@@ -66,7 +67,7 @@ export async function refreshUserToken(refreshToken: string) {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new AppError("User not found", 404); // <-- Replaced
   }
 
   const payload = { userId: user.id, email: user.email };

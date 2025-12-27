@@ -1,14 +1,39 @@
 import { Request, Response, NextFunction } from "express";
+import { AppError } from "../utils/AppError";
+import { ZodError } from "zod";
+import { Prisma } from "@prisma/client";
 
-export function errorHandler(
-  err: any,
+export const errorHandler = (
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction
-) {
-  console.error(err);
+) => {
+  // Default values
+  let statusCode = 500;
+  let message = "Internal Server Error";
 
-  res.status(err.status || 500).json({
-    message: err.message || "Internal server error",
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  } else if (err instanceof ZodError) {
+    statusCode = 400;
+    message = err.flatten().fieldErrors as any;
+  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") {
+      statusCode = 409;
+      message = "Resource already exists";
+    } else if (err.code === "P2025") {
+      statusCode = 404;
+      message = "Resource not found";
+    } else {
+      statusCode = 400;
+      message = "Database error";
+    }
+  }
+
+  res.status(statusCode).json({
+    success: false,
+    message,
   });
-}
+};
