@@ -1,22 +1,10 @@
-import { Router } from "express";
-import {
-  createOrganizationHandler,
-  getMyOrganizationsHandler,
-  getOrganizationHandler,
-  updateOrganizationHandler,
-  deleteOrganizationHandler,
-  inviteMemberHandler,
-  acceptInviteHandler,
-  listMembersHandler,
-  updateMemberRoleHandler,
-  removeMemberHandler
-} from "./organization.controller";
-import { authenticate } from "../auth/auth.middleware";
-
-const router = Router();
-
-router.use(authenticate);
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const organization_controller_1 = require("./organization.controller");
+const auth_middleware_1 = require("../auth/auth.middleware");
+const router = (0, express_1.Router)();
+router.use(auth_middleware_1.authenticate);
 /**
  * @swagger
  * /api/organizations:
@@ -45,8 +33,7 @@ router.use(authenticate);
  *       401:
  *         description: Unauthorized
  */
-router.post("/", createOrganizationHandler);
-
+router.post("/", organization_controller_1.createOrganizationHandler);
 /**
  * @swagger
  * /api/organizations:
@@ -61,8 +48,7 @@ router.post("/", createOrganizationHandler);
  *       401:
  *         description: Unauthorized
  */
-router.get("/", getMyOrganizationsHandler);
-
+router.get("/", organization_controller_1.getMyOrganizationsHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}:
@@ -85,8 +71,7 @@ router.get("/", getMyOrganizationsHandler);
  *       404:
  *         description: Not found
  */
-router.get("/:organizationId", getOrganizationHandler);
-
+router.get("/:organizationId", organization_controller_1.getOrganizationHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}:
@@ -115,8 +100,7 @@ router.get("/:organizationId", getOrganizationHandler);
  *       403:
  *         description: Permission denied
  */
-router.patch("/:organizationId", updateOrganizationHandler);
-
+router.patch("/:organizationId", organization_controller_1.updateOrganizationHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}:
@@ -137,8 +121,7 @@ router.patch("/:organizationId", updateOrganizationHandler);
  *       403:
  *         description: Only owner can delete
  */
-router.delete("/:organizationId", deleteOrganizationHandler);
-
+router.delete("/:organizationId", organization_controller_1.deleteOrganizationHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}/invite:
@@ -172,8 +155,7 @@ router.delete("/:organizationId", deleteOrganizationHandler);
  *       403:
  *         description: Permission denied
  */
-router.post("/:organizationId/invite", inviteMemberHandler);
-
+router.post("/:organizationId/invite", organization_controller_1.inviteMemberHandler);
 /**
  * @swagger
  * /api/organizations/invites/{token}/accept:
@@ -194,8 +176,7 @@ router.post("/:organizationId/invite", inviteMemberHandler);
  *       404:
  *         description: Invalid or expired token
  */
-router.post("/invites/:token/accept", acceptInviteHandler);
-
+router.post("/invites/:token/accept", organization_controller_1.acceptInviteHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}/members:
@@ -214,8 +195,7 @@ router.post("/invites/:token/accept", acceptInviteHandler);
  *       200:
  *         description: Success
  */
-router.get("/:organizationId/members", listMembersHandler);
-
+router.get("/:organizationId/members", organization_controller_1.listMembersHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}/members/{userId}:
@@ -252,8 +232,7 @@ router.get("/:organizationId/members", listMembersHandler);
  *       403:
  *         description: Permission denied
  */
-router.patch("/:organizationId/members/:userId", updateMemberRoleHandler);
-
+router.patch("/:organizationId/members/:userId", organization_controller_1.updateMemberRoleHandler);
 /**
  * @swagger
  * /api/organizations/{organizationId}/members/{userId}:
@@ -279,7 +258,5 @@ router.patch("/:organizationId/members/:userId", updateMemberRoleHandler);
  *       403:
  *         description: Permission denied
  */
-router.delete("/:organizationId/members/:userId", removeMemberHandler);
-
-
-export default router;
+router.delete("/:organizationId/members/:userId", organization_controller_1.removeMemberHandler);
+exports.default = router;
