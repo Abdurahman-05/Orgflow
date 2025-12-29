@@ -15,6 +15,10 @@ datasource db {
 
 
 
+
+/////////////////////
+// USER
+/////////////////////
 model User {
   id              String                @id @default(cuid())
   email           String                @unique
@@ -28,8 +32,14 @@ model User {
 
   ownedOrganizations Organization[]
   memberships        OrganizationMember[]
+  teamMemberships     TeamMember[]
+  assignedTasks       TaskUser[]
+  comments            Comment[]
 }
 
+/////////////////////
+// ORGANIZATION
+/////////////////////
 model Organization {
   id        String   @id @default(cuid())
   name      String
@@ -42,8 +52,13 @@ model Organization {
 
   members   OrganizationMember[]
   invites   OrganizationInvite[]
+  teams     Team[]
+  tasks     Task[]
 }
 
+/////////////////////
+// ORGANIZATION MEMBER
+/////////////////////
 model OrganizationMember {
   id             String   @id @default(cuid())
   userId         String
@@ -57,6 +72,9 @@ model OrganizationMember {
   @@unique([userId, organizationId])
 }
 
+/////////////////////
+// ORGANIZATION INVITE
+/////////////////////
 model OrganizationInvite {
   id             String   @id @default(cuid())
   email          String
@@ -71,8 +89,117 @@ model OrganizationInvite {
   @@unique([email, organizationId])
 }
 
+/////////////////////
+// TEAM (Optional Sub-group)
+/////////////////////
+model Team {
+  id             String   @id @default(cuid())
+  name           String
+  organizationId String
+  createdAt      DateTime @default(now())
+
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  members        TeamMember[]
+  tasks          Task[]
+}
+
+/////////////////////
+// TEAM MEMBER
+/////////////////////
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  team      Team   @relation(fields: [teamId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+
+  @@unique([teamId, userId])
+}
+
+/////////////////////
+// TASK
+/////////////////////
+model Task {
+  id                String       @id @default(cuid())
+  title             String
+  description       String?
+  status            TaskStatus   @default(TODO)
+  priority          TaskPriority @default(MEDIUM)
+  dueDate           DateTime?
+  organizationId    String
+  assignedToTeamId  String?
+  createdById       String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  organization      Organization @relation(fields: [organizationId], references: [id])
+  team              Team?        @relation(fields: [assignedToTeamId], references: [id])
+  assignedUsers     TaskUser[]
+  comments          Comment[]
+  attachments       Attachment[]
+}
+
+/////////////////////
+// TASK USER (for individual assignment)
+/////////////////////
+model TaskUser {
+  id      String @id @default(cuid())
+  taskId  String
+  userId  String
+
+  task    Task @relation(fields: [taskId], references: [id])
+  user    User @relation(fields: [userId], references: [id])
+
+  @@unique([taskId, userId])
+}
+
+/////////////////////
+// COMMENT
+/////////////////////
+model Comment {
+  id        String   @id @default(cuid())
+  taskId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  task      Task @relation(fields: [taskId], references: [id])
+  user      User @relation(fields: [userId], references: [id])
+}
+
+/////////////////////
+// ATTACHMENT
+/////////////////////
+model Attachment {
+  id        String   @id @default(cuid())
+  taskId    String
+  fileName  String
+  fileUrl   String
+  fileType  String
+  createdAt DateTime @default(now())
+
+  task      Task @relation(fields: [taskId], references: [id])
+}
+
+/////////////////////
+// ENUMS
+/////////////////////
 enum OrgRole {
   OWNER
   ADMIN
   MEMBER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
 }

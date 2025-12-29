@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.OrganizationInviteScalarFieldEnum = exports.OrganizationMemberScalarFieldEnum = exports.OrganizationScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.AttachmentScalarFieldEnum = exports.CommentScalarFieldEnum = exports.TaskUserScalarFieldEnum = exports.TaskScalarFieldEnum = exports.TeamMemberScalarFieldEnum = exports.TeamScalarFieldEnum = exports.OrganizationInviteScalarFieldEnum = exports.OrganizationMemberScalarFieldEnum = exports.OrganizationScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -106,7 +106,13 @@ exports.ModelName = {
     User: 'User',
     Organization: 'Organization',
     OrganizationMember: 'OrganizationMember',
-    OrganizationInvite: 'OrganizationInvite'
+    OrganizationInvite: 'OrganizationInvite',
+    Team: 'Team',
+    TeamMember: 'TeamMember',
+    Task: 'Task',
+    TaskUser: 'TaskUser',
+    Comment: 'Comment',
+    Attachment: 'Attachment'
 };
 /**
  * Enums
@@ -150,6 +156,51 @@ exports.OrganizationInviteScalarFieldEnum = {
     role: 'role',
     token: 'token',
     expiresAt: 'expiresAt',
+    createdAt: 'createdAt'
+};
+exports.TeamScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    organizationId: 'organizationId',
+    createdAt: 'createdAt'
+};
+exports.TeamMemberScalarFieldEnum = {
+    id: 'id',
+    teamId: 'teamId',
+    userId: 'userId',
+    joinedAt: 'joinedAt'
+};
+exports.TaskScalarFieldEnum = {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    status: 'status',
+    priority: 'priority',
+    dueDate: 'dueDate',
+    organizationId: 'organizationId',
+    assignedToTeamId: 'assignedToTeamId',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.TaskUserScalarFieldEnum = {
+    id: 'id',
+    taskId: 'taskId',
+    userId: 'userId'
+};
+exports.CommentScalarFieldEnum = {
+    id: 'id',
+    taskId: 'taskId',
+    userId: 'userId',
+    content: 'content',
+    createdAt: 'createdAt'
+};
+exports.AttachmentScalarFieldEnum = {
+    id: 'id',
+    taskId: 'taskId',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileType: 'fileType',
     createdAt: 'createdAt'
 };
 exports.SortOrder = {

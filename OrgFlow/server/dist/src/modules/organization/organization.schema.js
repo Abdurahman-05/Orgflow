@@ -10,7 +10,7 @@ exports.updateOrganizationSchema = zod_1.z.object({
     name: zod_1.z.string().min(1).optional(),
 });
 exports.inviteMemberSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email address"),
+    email: zod_1.z.email("Invalid email address"),
     role: zod_1.z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
 });
 exports.acceptInviteSchema = zod_1.z.object({
