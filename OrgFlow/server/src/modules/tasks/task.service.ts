@@ -1,6 +1,9 @@
 import prisma from "../../lib/prisma";
 import { AppError } from "../../utils/AppError";
 import { CreateTaskInput, UpdateTaskInput } from "./task.schema";
+import { createNotification } from "../notifications/notification.service";
+import { NotificationType } from "../../generated/prisma/enums";
+
 
 async function checkOrgRole(organizationId: string, userId: string, allowedRoles: string[]) {
   const member = await prisma.organizationMember.findUnique({
@@ -46,7 +49,7 @@ export async function createTask(organizationId: string, userId: string, data: C
     }
   }
 
-  return prisma.task.create({
+  const task = await prisma.task.create({
     data: {
       title: data.title,
       description: data.description,
@@ -58,6 +61,17 @@ export async function createTask(organizationId: string, userId: string, data: C
       createdById: userId,
     },
   });
+
+  await createNotification({
+    userId,
+    organizationId,
+    type: NotificationType.TASK_ASSIGNED,
+    entityId: task.id,
+    message: `You have been assigned to task: ${task.title}`,
+  });
+
+
+  return task;
 }
 
 export async function getOrgTasks(organizationId: string, userId: string) {

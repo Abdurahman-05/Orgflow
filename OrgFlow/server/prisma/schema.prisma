@@ -34,6 +34,7 @@ model User {
   createdTasks       Task[]
   comments           Comment[]
   attachments        Attachment[]
+  notifications      Notification[]
 }
 
 /////////////////////
@@ -49,10 +50,11 @@ model Organization {
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
 
-  members OrganizationMember[]
-  invites OrganizationInvite[]
-  teams   Team[]
-  tasks   Task[]
+  members       OrganizationMember[]
+  invites       OrganizationInvite[]
+  teams         Team[]
+  tasks         Task[]
+  notifications Notification[]
 }
 
 /////////////////////
@@ -157,6 +159,23 @@ model TaskAssignee {
 }
 
 /////////////////////
+// NOTIFICATION
+/////////////////////
+model Notification {
+  id             String           @id @default(cuid())
+  userId         String
+  organizationId String
+  type           NotificationType
+  entityId       String? // Reference to Task/Comment
+  message        String
+  readAt         DateTime?
+  createdAt      DateTime         @default(now())
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+/////////////////////
 // COMMENT
 /////////////////////
 model Comment {
@@ -207,4 +226,10 @@ enum TaskPriority {
   LOW
   MEDIUM
   HIGH
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_COMMENT
+  TASK_MENTION
 }

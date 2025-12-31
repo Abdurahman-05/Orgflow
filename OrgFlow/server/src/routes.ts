@@ -6,6 +6,7 @@ import { orgTeamsRouter, teamRouter } from "./modules/team/team.routes";
 import { taskCommentsRouter, commentRouter } from "./modules/comments/comment.route";
 import { taskAttachmentsRouter, attachmentRouter } from "./modules/attachments/attachment.route";
 import { orgTasksRouter, taskRouter } from "./modules/tasks/task.route";
+import notificationRoutes from "./modules/notifications/notification.route";
 import { acceptInviteHandler } from "./modules/organization/organization.controller";
 import { authenticate } from "./modules/auth/auth.middleware";
 
@@ -23,5 +24,6 @@ router.use("/tasks/:taskId/attachments", taskAttachmentsRouter);
 router.use("/tasks", taskRouter);
 router.use("/comments", commentRouter);
 router.use("/attachments", attachmentRouter);
+router.use("/notifications", notificationRoutes);
 router.post("/organization-invites/:token/accept", authenticate, acceptInviteHandler);
 export default router;
