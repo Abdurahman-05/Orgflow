@@ -73,6 +73,7 @@ export async function streamNotificationsHandler(
     if (!userId) throw new AppError("Authentication required", 401);
 
     addUserNotificationClient(userId, res);
+   
   } catch (error) {
     next(error);
   }

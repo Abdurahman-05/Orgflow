@@ -24,7 +24,7 @@ export function addUserNotificationClient(userId: string, res: Response) {
 
   const clients = userNotificationClients.get(userId)!;
   clients.add(res);
-
+   
   // Send a heartbeat to keep connection alive
   send(res, { type: "heartbeat", timestamp: new Date() });
 

@@ -62,15 +62,6 @@ export async function createTask(organizationId: string, userId: string, data: C
     },
   });
 
-  await createNotification({
-    userId,
-    organizationId,
-    type: NotificationType.TASK_ASSIGNED,
-    entityId: task.id,
-    message: `You have been assigned to task: ${task.title}`,
-  });
-
-
   return task;
 }
 
@@ -215,12 +206,23 @@ export async function assignUserToTask(taskId: string, userId: string, targetUse
     }
   }
 
-  return prisma.taskAssignee.create({
+  const assignment = await prisma.taskAssignee.create({
     data: {
       taskId,
       userId: targetUserId,
     },
   });
+
+
+ await createNotification({
+    userId: targetUserId,
+    organizationId: task.organizationId,
+    type: NotificationType.TASK_ASSIGNED,
+    entityId: task.id,
+    message: `You have been assigned to task: ${task.title}`,
+  });
+
+  return assignment;
 }
 
 export async function listTaskAssignees(taskId: string, userId: string) {
