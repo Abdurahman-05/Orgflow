@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginHandler, refreshTokenHandler, registerHandler } from "./auth.controller";
+import { loginHandler, refreshTokenHandler, registerHandler, verifyEmailHandler } from "./auth.controller";
 
 const router = Router();
 
@@ -80,5 +80,25 @@ router.post("/login", loginHandler);
  *         description: Unauthorized
  */
 router.post("/refresh", refreshTokenHandler);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     summary: Verify user email
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.get("/verify-email", verifyEmailHandler);
 
 export default router;
