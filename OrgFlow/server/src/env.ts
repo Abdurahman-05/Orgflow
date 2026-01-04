@@ -9,7 +9,7 @@ const EnvSchema = z.object({
   BACKEND_URL: z.string().default("http://localhost:5000"),
   JWT_SECRET: z.string(),
   JWT_REFRESH_SECRET: z.string(),
-  FRONTEND_URL: z.string().default("http://localhost:3000"),
+  FRONTEND_URL: z.string().default("http://localhost:3000"), 
   MAILTRAP_TOKEN: z.string().default("f262f3621d3aa21ac359dc75264a5370"),
 });
 
